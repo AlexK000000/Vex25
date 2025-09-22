@@ -1,1 +1,26 @@
 # vex 1155B Kestrel
+
+import time
+from vex import *
+
+brain=Brain()
+ControllerType.PRIMARY
+
+controller = Controller(PRIMARY)
+
+myVariable = 0
+teamsidevariable = 1 
+
+LeftD_F = Motor(Ports.PORT4,GearSetting.RATIO_18_1, True) 
+LeftD_B = Motor(Ports.PORT3,GearSetting.RATIO_18_1, True)
+
+RightD_F = Motor(Ports.PORT7,GearSetting.RATIO_18_1, False)
+RightD_B = Motor(Ports.PORT8,GearSetting.RATIO_18_1, False)
+
+imu1 = Inertial(Ports.PORT13)
+left_drive = MotorGroup(LeftD_F, LeftD_B,)
+right_drive = MotorGroup(RightD_F, RightD_B)
+drivetrain = DriveTrain(right_drive, left_drive)
+
+intake = Motor(Ports.PORT10,GearSetting.RATIO_18_1, False)
+Tchain = Motor(Ports.PORT6,GearSetting.RATIO_18_1, False)
