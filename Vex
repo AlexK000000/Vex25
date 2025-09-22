@@ -24,3 +24,58 @@ drivetrain = DriveTrain(right_drive, left_drive)
 
 intake = Motor(Ports.PORT10,GearSetting.RATIO_18_1, False)
 Tchain = Motor(Ports.PORT6,GearSetting.RATIO_18_1, False)
+
+#---------------------------------------------------------------#
+
+def driver():
+    global r_pos
+    global l_pos
+    global is_driver
+    global mode
+    is_driver=True
+    while True:
+        right_drive.set_velocity(controller.axis2.position(), PERCENT)
+        right_drive.spin(FORWARD)
+
+        left_drive.set_velocity(controller.axis3.position(), PERCENT)
+        left_drive.spin(FORWARD)
+
+        if controller.buttonX.pressing():
+            Tchain.stop()
+
+        if controller.buttonY.pressing():
+            Tchain.set_velocity(100, PERCENT)
+            Tchain.spin(FORWARD)
+          
+        if controller.buttonRight.pressing():
+            Tchain.set_velocity(100, PERCENT)
+            Tchain.spin(REVERSE) 
+
+        if controller.buttonA.pressing():
+            piston_out()
+
+        if controller.buttonB.pressing():
+            piston_in()
+
+        if controller.buttonUp.pressing():
+            intake.set_velocity(100, PERCENT)
+            intake.spin(FORWARD)
+
+        if controller.buttonDown.pressing():
+            intake.stop()
+        
+        if controller.buttonLeft.pressing():
+            intake.set_velocity(100, PERCENT)
+            intake.spin(REVERSE)
+
+    
+#---------------------------------------------------------------
+
+def autonomous():
+    global r_pos
+    global l_pos
+    global is_driver
+    is_driver = False
+
+
+competition = Competition(driver,autonomous)
