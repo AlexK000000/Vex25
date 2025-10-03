@@ -35,7 +35,7 @@ drivetrain = DriveTrain(right_drive, left_drive) #lets the whole DT move togethe
 intake = Motor(Ports.PORT10,GearSetting.RATIO_18_1, False) #should be replaced
 Tchain = Motor(Ports.PORT6,GearSetting.RATIO_18_1, False)
 
-#---------------------------------------------------------------#
+#-------------------------------DRIVER PORTION OF THE CODE--------------------------------#
 
 def driver(): # sets up the driver controls, namely pressing what buttons on the controller do on the robot
     """PLEASE DO NOT MESS WITH THESE 5 DEFINITIONS UNLESS THE VEXCODE EXTENSION CHANGES"""
@@ -46,44 +46,45 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
     is_driver=True
 
     while True:
-        right_drive.set_velocity(controller.axis2.position(), PERCENT) #makes the right drive move by what percentage forward the stick is
+        right_drive.set_velocity(controller.axis2.position(), PERCENT) # makes the right drive move by what percentage forward the stick is
         right_drive.spin(FORWARD)
 
-        left_drive.set_velocity(controller.axis3.position(), PERCENT) #makes the left drive move by what percentage forward the stick is
+        left_drive.set_velocity(controller.axis3.position(), PERCENT) # makes the left drive move by what percentage forward the stick is
         left_drive.spin(FORWARD)
 
-        if controller.buttonX.pressing():
+        if controller.buttonX.pressing(): # if button X is pressed then:
             Tchain.stop()
 
-        if controller.buttonY.pressing():
+        if controller.buttonY.pressing(): # if button Y is pressed then:
             Tchain.set_velocity(100, PERCENT)
             Tchain.spin(FORWARD)
           
-        if controller.buttonRight.pressing():
+        if controller.buttonRight.pressing(): # if the right button is pressed then:
             Tchain.set_velocity(100, PERCENT)
             Tchain.spin(REVERSE) 
 
-        if controller.buttonA.pressing():
+        if controller.buttonA.pressing(): # if button A is pressed then:
             piston_out()
 
-        if controller.buttonB.pressing():
+        if controller.buttonB.pressing(): # if button B is pressed then:
             piston_in()
 
-        if controller.buttonUp.pressing():
+        if controller.buttonUp.pressing(): # if the up button is pressed then:
             intake.set_velocity(100, PERCENT)
             intake.spin(FORWARD)
 
-        if controller.buttonDown.pressing():
+        if controller.buttonDown.pressing(): # if the down button is pressed then:
             intake.stop()
         
-        if controller.buttonLeft.pressing():
+        if controller.buttonLeft.pressing(): # if the left button is pressed then:
             intake.set_velocity(100, PERCENT)
             intake.spin(REVERSE)
 
     
-#---------------------------------------------------------------
+#-----------------------------AUTONOMOUS PORTION OF THE CODE---------------------------------#
 
-def autonomous():
+def autonomous(): # sets up the autonomous controls
+    """PLEASE DO NOT MESS WITH THESE 4 DEFINITIONS UNLESS THE VEXCODE EXTENSION CHANGES"""
     global r_pos
     global l_pos
     global is_driver

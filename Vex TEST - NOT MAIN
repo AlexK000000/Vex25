@@ -60,7 +60,14 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             Tchain.spin(FORWARD)
           
         if controller.buttonRight.pressing():
-            smartdrive.drive_for(FORWARD, 10)
+            drivetrain.drive_for(FORWARD, 10)
+            drivetrain.turn_to_heading(90)
+            drivetrain.drive_for(FORWARD, 10)
+            drivetrain.turn_to_heading(90)
+            drivetrain.drive_for(FORWARD, 10)
+            drivetrain.turn_to_heading(90)
+            drivetrain.drive_for(FORWARD, 10)
+            drivetrain.turn_to_heading(90)
 
         if controller.buttonA.pressing():
             piston_out()
@@ -76,7 +83,7 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             intake.stop()
         
         if controller.buttonLeft.pressing():
-            smartdrive.drive_for(BACKWARD, 10)
+            drivetrain.drive_for(BACKWARD, 10)
 
     
 #---------------------------------------------------------------
