@@ -28,7 +28,7 @@ RightD_B = Motor(Ports.PORT8,GearSetting.RATIO_18_1, False)
 
 left_drive = MotorGroup(LeftD_F, LeftD_B,) #lets the left half of the DT move together
 right_drive = MotorGroup(RightD_F, RightD_B) #lets the right half of the DT move together
-drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,IN) #lets the whole DT move together - use only when going straight - could we fit in the other arguements?
+drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,INCHES) #lets the whole DT move together - use only when going straight - could we fit in the other arguements?
 #what about the smartdrivetrain class?
 """Other Motor Definitions"""
 
@@ -69,12 +69,12 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             drivetrain.drive_for(FORWARD, 10)
             drivetrain.turn_to_heading(90)
 
-        if controller.buttonA.pressing():
+"""        if controller.buttonA.pressing(): # if button A is pressed then:
             piston_out()
 
-        if controller.buttonB.pressing():
-            piston_in()
-
+        if controller.buttonB.pressing(): # if button B is pressed then:
+            piston_in()"""
+        
         if controller.buttonUp.pressing():
             intake.set_velocity(100, PERCENT)
             intake.spin(FORWARD)
@@ -83,7 +83,7 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             intake.stop()
         
         if controller.buttonLeft.pressing():
-            drivetrain.drive_for(BACKWARD, 10)
+            drivetrain.drive_for(REVERSE, 10)
 
     
 #---------------------------------------------------------------
