@@ -63,6 +63,11 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             Tchain.set_velocity(100, PERCENT)
             Tchain.spin(REVERSE) 
 
+       # if controller.buttonA.pressing(): # if button A is pressed then:
+        #    piston_out()
+
+        #if controller.buttonB.pressing(): # if button B is pressed then:
+        #    piston_in()
 
         if controller.buttonUp.pressing(): # if the up button is pressed then:
             intake.set_velocity(100, PERCENT)

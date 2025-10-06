@@ -68,12 +68,6 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
             drivetrain.turn_to_heading(90)
             drivetrain.drive_for(FORWARD, 10)
             drivetrain.turn_to_heading(90)
-
-"""        if controller.buttonA.pressing(): # if button A is pressed then:
-            piston_out()
-
-        if controller.buttonB.pressing(): # if button B is pressed then:
-            piston_in()"""
         
         if controller.buttonUp.pressing():
             intake.set_velocity(100, PERCENT)
