@@ -20,14 +20,14 @@ imu1 = Inertial(Ports.PORT13)
 
 """Drivetrain Definitions"""
 
-LeftD_F = Motor(Ports.PORT4,GearSetting.RATIO_18_1, True) #defines the motor variables, arguements are port, ratio, reverse?
-LeftD_B = Motor(Ports.PORT3,GearSetting.RATIO_18_1, True)
+LeftD_F = Motor(Ports.PORT4,GearSetting.RATIO_18_1, False) #defines the motor variables, arguements are port, ratio, reverse?
+LeftD_B = Motor(Ports.PORT3,GearSetting.RATIO_18_1, False)
 
-RightD_F = Motor(Ports.PORT7,GearSetting.RATIO_18_1, False) 
-RightD_B = Motor(Ports.PORT8,GearSetting.RATIO_18_1, False)
+RightD_F = Motor(Ports.PORT7,GearSetting.RATIO_18_1, True) 
+RightD_B = Motor(Ports.PORT8,GearSetting.RATIO_18_1, True)
 
-left_drive = MotorGroup(LeftD_F, LeftD_B,) #lets the left half of the DT move together
-right_drive = MotorGroup(RightD_F, RightD_B) #lets the right half of the DT move together
+right_drive = MotorGroup(LeftD_F, LeftD_B,) #lets the left half of the DT move together
+left_drive = MotorGroup(RightD_F, RightD_B) #lets the right half of the DT move together
 drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,INCHES) #lets the whole DT move together - use only when going straight - could we fit in the other arguements?
 #what about the smartdrivetrain class?
 """Other Motor Definitions"""
