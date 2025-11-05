@@ -35,6 +35,7 @@ drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,
 intake = Motor(Ports.PORT10,GearSetting.RATIO_18_1, False) 
 intake.set_velocity(100, PERCENT)
 Tchain = Motor(Ports.PORT6,GearSetting.RATIO_18_1, False)
+Tchain.set_velocity(100, PERCENT)
 
 #---------------------------------------------------------------#
 
@@ -53,21 +54,14 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         left_drive.set_velocity(controller.axis3.position(), PERCENT) #makes the left drive move by what percentage forward the stick is
         left_drive.spin(FORWARD)
 
-#        if controller.buttonX.pressing():
- #           Tchain.stop()
+        if controller.buttonX.pressing():
+            Tchain.spin(REVERSE)
 
         if controller.buttonY.pressing():
-            intake.stop()
+            Tchain.spin(FORWARD)
           
-        #if controller.buttonRight.pressing() and controller.buttonX.pressing() and controller.buttonLeft.pressing():
-         #   drivetrain.drive_for(FORWARD, 10)
-          #  drivetrain.turn_to_heading(90)
-           # drivetrain.drive_for(FORWARD, 10)
-           # drivetrain.turn_to_heading(90)
-           # drivetrain.drive_for(FORWARD, 10)
-           # drivetrain.turn_to_heading(90)
-           # drivetrain.drive_for(FORWARD, 10)
-           # drivetrain.turn_to_heading(90)
+        if controller.buttonRight.pressing() and controller.buttonX.pressing() and controller.buttonLeft.pressing():
+            Tchain.stop()
         
         if controller.buttonUp.pressing():
            intake.spin(FORWARD)
