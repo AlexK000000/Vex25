@@ -20,22 +20,37 @@ imu1 = Inertial(Ports.PORT13)
 
 """Drivetrain Definitions"""
 
-LeftD_F = Motor(Ports.PORT4,GearSetting.RATIO_18_1, False) #defines the motor variables, arguements are port, ratio, reverse?
-LeftD_B = Motor(Ports.PORT3,GearSetting.RATIO_18_1, False)
+RightDF = Motor(Ports.PORT15,GearSetting.RATIO_18_1, False) #defines the motor variables, arguements are port, ratio, reverse?
+RightDB = Motor(Ports.PORT14,GearSetting.RATIO_18_1, False)
+RightDF.set_velocity(100, PERCENT)
+RightDB.set_velocity(100, PERCENT)
 
-RightD_F = Motor(Ports.PORT7,GearSetting.RATIO_18_1, True) 
-RightD_B = Motor(Ports.PORT8,GearSetting.RATIO_18_1, True)
+LeftDF = Motor(Ports.PORT12,GearSetting.RATIO_18_1, True) 
+LeftDB = Motor(Ports.PORT10,GearSetting.RATIO_18_1, True)
+LeftDF.set_velocity(100, PERCENT)
+LeftDB.set_velocity(100, PERCENT)
 
-right_drive = MotorGroup(LeftD_F, LeftD_B,) #lets the left half of the DT move together
-left_drive = MotorGroup(RightD_F, RightD_B) #lets the right half of the DT move together
+outtakeR = Motor(Ports.PORT16,GearSetting.RATIO_18_1, False)
+outtakeL = Motor(Ports.PORT18,GearSetting.RATIO_18_1, True)
+outtakeR.set_velocity(100, PERCENT)
+outtakeL.set_velocity(100, PERCENT)
+
+right_drive = MotorGroup(RightDF, RightDB,) #lets the left half of the DT move together
+left_drive = MotorGroup(LeftDF, LeftDB) #lets the right half of the DT move together
 drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,INCHES) #lets the whole DT move together - use only when going straight - could we fit in the other arguements?
 #what about the smartdrivetrain class?
 """Other Motor Definitions"""
 
-intake = Motor(Ports.PORT10,GearSetting.RATIO_18_1, False) 
+intake = Motor(Ports.PORT17,GearSetting.RATIO_18_1, False) 
 intake.set_velocity(100, PERCENT)
-Tchain = Motor(Ports.PORT6,GearSetting.RATIO_18_1, False)
+
+Tchain = Motor(Ports.PORT19,GearSetting.RATIO_18_1, False)
 Tchain.set_velocity(100, PERCENT)
+
+Ramp = Motor(Ports.PORT13,GearSetting.RATIO_18_1, False)
+Ramp.set_velocity(25, PERCENT)
+
+topspin = MotorGroup(outtakeL, outtakeR, Tchain)
 
 #---------------------------------------------------------------#
 
@@ -55,13 +70,13 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         left_drive.spin(FORWARD)
 
         if controller.buttonX.pressing():
-            Tchain.spin(REVERSE)
+            topspin.spin(REVERSE)
 
-        if controller.buttonY.pressing():
-            Tchain.spin(FORWARD)
+        if controller.buttonB.pressing():
+            topspin.spin(FORWARD)
           
-        if controller.buttonRight.pressing() and controller.buttonX.pressing() and controller.buttonLeft.pressing():
-            Tchain.stop()
+        if controller.buttonY.pressing() and controller.buttonX.pressing() and controller.buttonLeft.pressing():
+            topspin.stop()
         
         if controller.buttonUp.pressing():
            intake.spin(FORWARD)
@@ -69,8 +84,14 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         if controller.buttonDown.pressing():
             intake.spin(REVERSE)
         
-    #    if controller.buttonLeft.pressing():
-     #       drivetrain.drive_for(REVERSE, 10)
+        if controller.buttonRight.pressing():
+            intake.stop()
+        
+        if controller.buttonL1.pressing():
+            Ramp.spin(FORWARD)
+        
+        if controller.buttonR1.pressing():
+            Ramp.spin(REVERSE)
 
     
 #---------------------------------------------------------------
