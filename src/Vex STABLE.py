@@ -56,12 +56,6 @@ Ramp.set_velocity(7,PERCENT)
 
 topspin = MotorGroup(outtakeL, outtakeR)
 
-def ramppressu(x):
-    Ramp.spin_to_position(10, DEGREES)
-
-def ramppressd(x):
-    Ramp.spin_to_position(-10, DEGREES)
-
 #---------------------------------------------------------------#
 
 def driver(): # sets up the driver controls, namely pressing what buttons on the controller do on the robot
