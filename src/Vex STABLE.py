@@ -6,6 +6,8 @@ import math
 
 """Global and Necessary Definitions"""
 
+plusminus = 1
+
 brain=Brain() #defines the brain variable, IMPORTANT: DO NOT REMOVE
 
 ControllerType.PRIMARY #what is the difference between this and the next line, are both necesary? 
@@ -16,7 +18,7 @@ teamsidevariable = 1 #same here
 
 """Sensor Definitions"""
 
-imu1 = Inertial(Ports.PORT13) 
+imu1 = Inertial(Ports.PORT21) 
 
 """Drivetrain Definitions"""
 
@@ -25,15 +27,17 @@ RightDB = Motor(Ports.PORT14,GearSetting.RATIO_18_1, False)
 RightDF.set_velocity(100, PERCENT)
 RightDB.set_velocity(100, PERCENT)
 
-LeftDF = Motor(Ports.PORT12,GearSetting.RATIO_18_1, True) 
-LeftDB = Motor(Ports.PORT10,GearSetting.RATIO_18_1, True)
+LeftDF = Motor(Ports.PORT10,GearSetting.RATIO_18_1, True) 
+LeftDB = Motor(Ports.PORT11,GearSetting.RATIO_18_1, True)
 LeftDF.set_velocity(100, PERCENT)
 LeftDB.set_velocity(100, PERCENT)
 
-outtakeR = Motor(Ports.PORT16,GearSetting.RATIO_18_1, False)
-outtakeL = Motor(Ports.PORT18,GearSetting.RATIO_18_1, True)
-outtakeR.set_velocity(100, PERCENT)
+
+outtakeR = Motor(Ports.PORT16,GearSetting.RATIO_18_1, True)
+outtakeL = Motor(Ports.PORT18,GearSetting.RATIO_18_1, False)
 outtakeL.set_velocity(100, PERCENT)
+outtakeR.set_velocity(100, PERCENT)
+
 
 right_drive = MotorGroup(RightDF, RightDB,) #lets the left half of the DT move together
 left_drive = MotorGroup(LeftDF, LeftDB) #lets the right half of the DT move together
@@ -48,9 +52,15 @@ Tchain = Motor(Ports.PORT19,GearSetting.RATIO_18_1, False)
 Tchain.set_velocity(100, PERCENT)
 
 Ramp = Motor(Ports.PORT13,GearSetting.RATIO_18_1, False)
-Ramp.set_velocity(25, PERCENT)
+Ramp.set_velocity(7,PERCENT)
 
-topspin = MotorGroup(outtakeL, outtakeR, Tchain)
+topspin = MotorGroup(outtakeL, outtakeR)
+
+def ramppressu(x):
+    Ramp.spin_to_position(10, DEGREES)
+
+def ramppressd(x):
+    Ramp.spin_to_position(-10, DEGREES)
 
 #---------------------------------------------------------------#
 
@@ -61,7 +71,8 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
     global is_driver
     global mode 
     is_driver=True
-    
+
+
     while True:
         right_drive.set_velocity(controller.axis2.position(), PERCENT) #makes the right drive move by what percentage forward the stick is
         right_drive.spin(FORWARD)
@@ -70,13 +81,13 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         left_drive.spin(FORWARD)
 
         if controller.buttonX.pressing():
-            topspin.spin(REVERSE)
+            Tchain.spin(REVERSE)
 
         if controller.buttonB.pressing():
-            topspin.spin(FORWARD)
+            Tchain.spin(FORWARD)
           
-        if controller.buttonY.pressing() and controller.buttonX.pressing() and controller.buttonLeft.pressing():
-            topspin.stop()
+        if controller.buttonY.pressing():
+            Tchain.stop()
         
         if controller.buttonUp.pressing():
            intake.spin(FORWARD)
@@ -86,12 +97,26 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         
         if controller.buttonRight.pressing():
             intake.stop()
+
+        if controller.buttonR2.pressing():
+            topspin.spin(FORWARD)
+        
+        if controller.buttonL2.pressing():
+            topspin.spin(REVERSE)
+        
+        if controller.buttonA.pressing():
+            topspin.stop()
         
         if controller.buttonL1.pressing():
             Ramp.spin(FORWARD)
-        
-        if controller.buttonR1.pressing():
+        elif controller.buttonR1.pressing():
             Ramp.spin(REVERSE)
+        else:
+            Ramp.stop()
+        
+        
+        
+        
 
     
 #---------------------------------------------------------------
@@ -101,6 +126,5 @@ def autonomous():
     global l_pos
     global is_driver
     is_driver = False
-
 
 competition = Competition(driver,autonomous)
