@@ -69,10 +69,10 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
 
     while True:
 
-        left_drive.set_velocity((controller.axis3.position()*(-(controller.axis1.position()))), PERCENT) #makes the left drive move by what percentage forward the stick is
+        left_drive.set_velocity(((controller.axis3.position())+(controller.axis1.position())/2), PERCENT) #makes the left drive move by what percentage forward the stick is
         left_drive.spin(FORWARD)
 
-        right_drive.set_velocity((controller.axis3.position()*controller.axis1.position()), PERCENT) #makes the left drive move by what percentage forward the stick is
+        right_drive.set_velocity(((controller.axis3.position())-(controller.axis1.position())/2), PERCENT) #makes the left drive move by what percentage forward the stick is
         right_drive.spin(FORWARD)
 
         if controller.buttonX.pressing():
