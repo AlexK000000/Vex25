@@ -9,10 +9,10 @@
 		"creationDate": "10/5/2025, 7:25:53 PM",
 		"platform": "V5",
 		"language": "python",
-		"slot": 3,
+		"slot": 2,
 		"sdkVersion": "V5_1_0_1_25",
 		"python": {
-			"main": "src/Vex lateral test.py"
+			"main": "src/Vex TEST.py"
 		}
 	}
 }
