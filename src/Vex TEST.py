@@ -7,6 +7,7 @@ import math
 """Global and Necessary Definitions"""
 
 plusminus = 2
+hoppercycle = 2
 
 brain=Brain() #defines the brain variable, IMPORTANT: DO NOT REMOVE
 #SLOT NUMBER 17 DOES NOT WORK
@@ -49,6 +50,8 @@ drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,
 #intake = Motor(Ports.PORT17,GearSetting.RATIO_18_1, False) port relegated to descore
 #intake.set_velocity(100, PERCENT)
 
+#According to Ryan on 2/19/2026 Port 17 is broken. Please verify.
+
 Tchain = Motor(Ports.PORT19,GearSetting.RATIO_18_1, False)
 Tchain.set_velocity(100, PERCENT)
 
@@ -62,6 +65,9 @@ topspin = MotorGroup(outtakeL, outtakeR)
 
 DeScore = Motor(Ports.PORT9,GearSetting.RATIO_18_1, False)
 DeScore.set_velocity(100,PERCENT)
+
+HopperRamp = Motor(Ports.PORT12,GearSetting.RATIO_18_1)
+HopperRamp.set_velocity(100,PERCENT)
 
 RampPiston = Pneumatics(brain.three_wire_port.f)
 
@@ -109,6 +115,21 @@ def StopDeScore():
         plusminus += 1
     else:
         plusminus -= 1
+
+def MoveHopperRamp():
+   global hoppercycle
+   if hoppercycle ==1:
+        HopperRamp.spin(FORWARD)
+   else:
+        HopperRamp.spin(REVERSE)
+
+def StopHopperRamp():
+    global hoppercycle
+    HopperRamp.stop()
+    if hoppercycle ==1:
+        hoppercycle += 1
+    else:
+        hoppercycle -= 1
 
 def RampUp():
     RampPiston.open()
@@ -170,6 +191,11 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
 
     controller.buttonL1.pressed(RampPiston.open)
     controller.buttonR1.pressed(RampPiston.close)
+
+    controller.buttonLeft.pressed(MoveHopperRamp)
+    controller.buttonLeft.released(StopHopperRamp)
+
+
 
     while True:
         right_drive.set_velocity(controller.axis2.position(), PERCENT) #makes the right drive move by what percentage forward the stick is
