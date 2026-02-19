@@ -6,10 +6,10 @@ import math
 
 """Global and Necessary Definitions"""
 
-plusminus = 1
-Ocycle=3
+plusminus = 2
 
 brain=Brain() #defines the brain variable, IMPORTANT: DO NOT REMOVE
+#SLOT NUMBER 17 DOES NOT WORK
 
 ControllerType.PRIMARY #what is the difference between this and the next line, are both necesary? 
 controller = Controller(PRIMARY)
@@ -52,43 +52,69 @@ drivetrain = SmartDrive(right_drive, left_drive, imu1,(3.25 * math.pi),13.95,13,
 Tchain = Motor(Ports.PORT19,GearSetting.RATIO_18_1, False)
 Tchain.set_velocity(100, PERCENT)
 
-Ramp = Motor(Ports.PORT13,GearSetting.RATIO_18_1, False)
-Ramp.set_velocity(7,PERCENT)
+"""Ramp = Motor(Ports.PORT13,GearSetting.RATIO_18_1, False)
+Ramp.set_velocity(7,PERCENT)"""
 
-Intake = Motor(Ports.PORT17,GearSetting.RATIO_18_1, False)
+Intake = Motor(Ports.PORT8,GearSetting.RATIO_18_1, False)
 Intake.set_velocity(100,PERCENT)
 
 topspin = MotorGroup(outtakeL, outtakeR)
 
-def ramppressu(x):
+DeScore = Motor(Ports.PORT9,GearSetting.RATIO_18_1, False)
+DeScore.set_velocity(100,PERCENT)
+
+RampPiston = Pneumatics(brain.three_wire_port.f)
+
+"""def ramppressu(x):
     Ramp.spin_to_position(10, DEGREES)
 
 def ramppressd(x):
-    Ramp.spin_to_position(-10, DEGREES)
+    Ramp.spin_to_position(-10, DEGREES)"""
 
 def TFor() :
-    if not Tchain.direction()==FORWARD:  
+    if Tchain.direction()!=FORWARD:  
         Tchain.spin(FORWARD)
     else:  
-        Tchain.stop()
+     Tchain.stop()
 
 def TRev():
-    if not Tchain.direction==REVERSE:
-        Tchain.spin(REVERSE)
+    if Tchain.direction()!=REVERSE:
+     Tchain.spin(REVERSE)
     else:
-        Tchain.stop()
+     Tchain.stop()
 
 def InFor():
-    if not Intake.direction==FORWARD:
+    if Intake.direction()!=FORWARD:
         Intake.spin(FORWARD)
     else:
-        Intake.stop()
+     Intake.stop()
 
 def InRev():
-    if not Intake.direction==REVERSE:
+    if Intake.direction()!=REVERSE:
         Intake.spin(REVERSE)
     else:
-        Intake.stop()
+     Intake.stop()
+
+def MoveDeScore():
+    global plusminus
+    if plusminus ==1:
+        DeScore.spin(FORWARD)
+    else:
+        DeScore.spin(REVERSE)
+
+def StopDeScore():
+    global plusminus
+    DeScore.stop()
+    if plusminus ==1:
+        plusminus += 1
+    else:
+        plusminus -= 1
+
+def RampUp():
+    RampPiston.open()
+
+def RampDown():
+    RampPiston.close()
 
 #AI definitions - I object but at this point in time I shall humor ryan, I will no longer touch the code. When he can explain it to me then we shall talk.
 
@@ -115,11 +141,11 @@ def turn_left(deg):
     wheel_dist = (deg / 360) * turn_circ
     motor_deg = (wheel_dist / WHEEL_CIRCUMFERENCE) * 360
 
-    LeftDF.spin_for(REVERSE, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
-    LeftDB.spin_for(REVERSE, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
+    RightDF.spin_for(REVERSE, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
+    RightDB.spin_for(REVERSE, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
 
-    RightDF.spin_for(FORWARD, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
-    RightDB.spin_for(FORWARD, motor_deg, DEGREES, TURN_SPEED, PERCENT, True)
+    LeftDF.spin_for(FORWARD, motor_deg, DEGREES, TURN_SPEED, PERCENT, False)
+    LeftDB.spin_for(FORWARD, motor_deg, DEGREES, TURN_SPEED, PERCENT, True)
 
 
 
@@ -138,6 +164,12 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
 
     controller.buttonUp.pressed(InFor)
     controller.buttonDown.pressed(InRev)
+
+    controller.buttonRight.pressed(MoveDeScore)
+    controller.buttonRight.released(StopDeScore)
+
+    controller.buttonL1.pressed(RampPiston.open)
+    controller.buttonR1.pressed(RampPiston.close)
 
     while True:
         right_drive.set_velocity(controller.axis2.position(), PERCENT) #makes the right drive move by what percentage forward the stick is
@@ -164,13 +196,13 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
         
         if controller.buttonA.pressing():
             topspin.stop()
-        
+        """
         if controller.buttonL1.pressing():
             Ramp.spin(FORWARD)
         elif controller.buttonR1.pressing():
             Ramp.spin(REVERSE)
         else:
-            Ramp.stop()
+            Ramp.stop()"""
         
         
         
@@ -184,7 +216,8 @@ def autonomous():
     global l_pos
     global is_driver
     is_driver = False  
-
+    
+    RampPiston.close()
     #Here begins AI code, once again I object, I shall not touch the code until Ryan can explain to me what it is that this does and the cost behind his making it.
     # 1. Drive backwards 36 inches
     drive_inches(-36)
