@@ -118,6 +118,8 @@ def StopDeScore():
 
 def MoveHopperRamp():
    global hoppercycle
+   outtakeR.spin_for(FORWARD, (2.5-(outtakeR.position(TURNS)%2.5)),TURNS)
+   outtakeL.spin_for(FORWARD, (2.5-(outtakeL.position(TURNS)%2.5)),TURNS)
    if hoppercycle ==1:
         HopperRamp.spin(FORWARD)
    else:
@@ -180,6 +182,9 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
     global mode 
     is_driver=True
 
+    outtakeR.set_position(0, TURNS)
+    outtakeL.set_position(0, TURNS)
+
     controller.buttonX.pressed(TFor)
     controller.buttonB.pressed(TRev)
 
@@ -196,8 +201,10 @@ def driver(): # sets up the driver controls, namely pressing what buttons on the
     controller.buttonLeft.released(StopHopperRamp)
 
 
-
     while True:
+        brain.screen.print(outtakeR.position(DEGREES)-360)
+        brain.screen.next_row()
+        brain.screen.print(outtakeL.position(DEGREES))
         right_drive.set_velocity(controller.axis2.position(), PERCENT) #makes the right drive move by what percentage forward the stick is
         right_drive.spin(FORWARD)
 
